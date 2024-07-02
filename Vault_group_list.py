@@ -1,6 +1,14 @@
 import hvac
 import csv
 
+
+# try:
+#     with open(VAULT_TOKEN_PATH, 'r') as token_file:
+#         vault_token = token_file.read().strip()
+# except FileNotFoundError:
+#     print(f"Vault token file not found at {VAULT_TOKEN_PATH}. Make sure you have logged in using Vault CLI.")
+#     exit(1)
+
 # Configuration - Replace these with your actual Vault details
 VAULT_URL = 'http://127.0.0.1:8200'  # Your Vault server URL
 ROLE_ID = 'your-approle-role-id'      # Your AppRole Role ID
