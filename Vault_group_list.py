@@ -36,23 +36,26 @@ except hvac.exceptions.InvalidPath:
     print("Failed to retrieve groups. Make sure your Vault setup and path are correct.")
     exit(1)
 
-# Prepare data for CSV
-csv_data = []
-for group_name, group_info in groups.items():
-    # Fetch detailed information about the group to get the associated policies
-    group_id = group_info['id']
-    group_details = client.secrets.identity.read_group(group_id)
-    policies = group_details['data'].get('policies', [])
+filename = 'group_policies.csv'
 
-    csv_data.append([group_name, ', '.join(policies)])
+# Open the CSV file for writing
+with open(filename, 'w', newline='') as csvfile:
+    # Define the fieldnames for the CSV file
+    fieldnames = ['GroupName', 'Policies']
+    
+    # Create a writer object from the csv module
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    
+    # Write the header to the CSV file
+    writer.writeheader()
+    
+    # Iterate over the Group dictionary
+    for group_key, group_info in Group.items():
+        # Extract the group name and policies
+        group_name = group_info['name']
+        policies = ', '.join(group_info['policies'])  # Join policies into a single string
+        
+        # Write the group name and policies to the CSV file
+        writer.writerow({'GroupName': group_name, 'Policies': policies})
 
-# Define the CSV file path
-csv_file = 'vault_groups_policies.csv'
-
-# Write data to CSV
-with open(csv_file, mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Group Name', 'Policies'])  # CSV header
-    writer.writerows(csv_data)
-
-print(f"Exported group and policy data to {csv_file}")
+print(f"Group names and policies have been written to {filename}.")
