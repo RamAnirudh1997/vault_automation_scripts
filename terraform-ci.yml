@@ -1,0 +1,38 @@
+stages:
+  - init
+  - plan
+  - apply
+
+variables:
+  VAULT_ADDR: "https://your-vault-address"  # Replace with your Vault address
+
+init:
+  stage: init
+  image: hashicorp/terraform:latest
+  script:
+    - terraform init
+  tags:
+    - terraform
+
+plan:
+  stage: plan
+  image: hashicorp/terraform:latest
+  script:
+    - terraform init
+    - terraform plan -out=tfplan
+    - terraform output  # Display Terraform outputs
+  tags:
+    - terraform
+
+apply:
+  stage: apply
+  image: hashicorp/terraform:latest
+  script:
+    - terraform apply tfplan
+  environment:
+    name: production
+  tags:
+    - terraform
+  only:
+    - master  # Run this job only on the master branch
+  when: manual  # Manual trigger for apply stage
