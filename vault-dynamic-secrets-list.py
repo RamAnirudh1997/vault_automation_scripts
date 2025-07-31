@@ -3,6 +3,7 @@ import csv
 #I want to test git
 # Vault Configuration
 VAULT_ADDR = "https://your-vault-instance:8200"
+try there
 VAULT_TOKEN = "your-vault-token"
 NAMESPACE = "admin"  # Namespace to pass
 
